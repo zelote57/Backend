@@ -1,5 +1,7 @@
 const express = require('express');
 
+const HttpError = require('../models/http-error');
+
 const router = express.Router();
 
 const DUMMY_PLACES = [
@@ -23,7 +25,7 @@ router.get('/:pid', (req, res, next) => {
     })
 
     if (!place) {
-        const error = new Error('Could not find a place for the provider id.');
+        const error = new HttpError('Could not find a place for the provider id.', 404);
         error.code = 404;
         throw error;
     }
