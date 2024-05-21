@@ -16,6 +16,12 @@ const getUsers = (req, res, next) => {
 
 const signup = (req, res, next) => {
     const { name, email, password} = req.body;
+
+    const hasUser = DUMMY_USERS.find(u => u.email === email);    
+    if (hasUser){
+        throw new HttpError('Could not create user, email already exist', 422);
+    }
+
     const createdUser = {
         id: uuid.v4(),
         name,
@@ -28,7 +34,7 @@ const signup = (req, res, next) => {
 
 const login = (req, res, next) => {
     const {email, password} = req.body;
-    const identifiedUser = DUMMY_USERS.find(u => u.id === email);
+    const identifiedUser = DUMMY_USERS.find(u => u.email === email);
     if (!identifiedUser || identifiedUser.password !== password){
         throw new HttpError('Could not identify user, credentials seem to be wrong', 401);
     }
